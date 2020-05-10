@@ -73,6 +73,9 @@ public class Main {
                     C.imprime_ordem();
                     break;
                 case 0:
+                    System.out.println("Operações A: " + A.getOperations());
+                    System.out.println("Operações B: " + B.getOperations());
+                    System.out.println("Operações C: " + C.getOperations());
                     System.exit(0);
             }
         } while(op != 0);

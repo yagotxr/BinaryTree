@@ -1,6 +1,7 @@
 class ArvoreBinaria {
 
     private No root;
+    private int operations = 0;
 
     public ArvoreBinaria() { // Inicializando a árvore
         root = null;
@@ -13,12 +14,14 @@ class ArvoreBinaria {
         novo.esq = null;
 
         if (root == null) {
+            operations++;
             root = novo;
         }
         else  {
             No atual = root;
             No anterior;
             if (buscar(codigo, false) != null){
+                operations++;
                 System.out.print("Este livro já existe no nosso banco!");
                 return;
 
@@ -26,15 +29,19 @@ class ArvoreBinaria {
             while(true) {
                 anterior = atual;
                 if (codigo <= atual.livro.getCodigo()) {
+                    operations++;
                     atual = atual.esq;
                     if (atual == null) {
+                        operations++;
                         anterior.esq = novo;
                         return;
                     }
                 }
                 else {
+                    operations++;
                     atual = atual.dir;
                     if (atual == null) {
+                        operations++;
                         anterior.dir = novo;
                         return;
                     }
@@ -53,6 +60,7 @@ class ArvoreBinaria {
         int c = 1;
         if (root == null) {
             if (comparacao == true){
+                operations++;
                 System.out.println(" comparações: " + c);
             }
             return null;
@@ -60,10 +68,18 @@ class ArvoreBinaria {
 
         No atual = root;
         while (atual.livro.getCodigo() != codigo) {
-            if(codigo < atual.livro.getCodigo() ) atual = atual.esq;
-            else atual = atual.dir;
+            if(codigo < atual.livro.getCodigo() ) {
+                operations++;
+                atual = atual.esq;
+            }
+            else {
+                operations++;
+                atual = atual.dir;
+            }
             if (atual == null) {
+                operations++;
                 if (comparacao == true){
+                    operations++;
                     System.out.println(" comparações: " + c);
                 }
                 return null;
@@ -71,6 +87,7 @@ class ArvoreBinaria {
             c ++;
         }
         if (comparacao == true){
+            operations++;
             System.out.println(" comparações: " + c);
         }
         return atual;
@@ -78,6 +95,7 @@ class ArvoreBinaria {
 
     public boolean remover(long codigo) {
         if (root == null) {
+            operations++;
             return false;
         }
 
@@ -88,38 +106,79 @@ class ArvoreBinaria {
         while (atual.livro.getCodigo() != codigo) {
             pai = atual;
             if(codigo < atual.livro.getCodigo() ) {
+                operations++;
                 atual = atual.esq;
                 filho_esq = true;
             }
             else {
+                operations++;
                 atual = atual.dir;
                 filho_esq = false;
             }
             if (atual == null) {
+                operations++;
                 return false;
             }
         }
 
         if (atual.esq == null && atual.dir == null) {
-            if (atual == root ) root = null;
-            else if (filho_esq) pai.esq = null;
-            else pai.dir = null;
+            if (atual == root ) {
+                operations++;
+                root = null;
+            }
+            else if (filho_esq) {
+                operations++;
+                pai.esq = null;
+            }
+            else {
+                operations++;
+                pai.dir = null;
+            }
         }
         else if (atual.dir == null) {
-            if (atual == root) root = atual.esq;
-            else if (filho_esq) pai.esq = atual.esq;
-            else pai.dir = atual.esq;
+            operations++;
+            if (atual == root) {
+                operations++;
+                root = atual.esq;
+            }
+            else if (filho_esq) {
+                operations++;
+                pai.esq = atual.esq;
+            }
+            else {
+                operations++;
+                pai.dir = atual.esq;
+            }
         }
         else if (atual.esq == null) {
-            if (atual == root) root = atual.dir;
-            else if (filho_esq) pai.esq = atual.dir;
-            else pai.dir = atual.dir;
+            operations++;
+            if (atual == root) {
+                operations++;
+                root = atual.dir;
+            }
+            else if (filho_esq) {
+                operations++;
+                pai.esq = atual.dir;
+            }
+            else {
+                operations++;
+                pai.dir = atual.dir;
+            }
         }
         else {
             No sucessor = sucessor_(atual);
-            if (atual == root) root = sucessor;
-            else if(filho_esq) pai.esq = sucessor;
-            else pai.dir = sucessor;
+            if (atual == root) {
+                operations++;
+                root = sucessor;
+            }
+            else if(filho_esq) {
+                operations++;
+                pai.esq = sucessor;
+            }
+            else {
+                operations++;
+                pai.dir = sucessor;
+            }
             sucessor.esq = atual.esq;
         }
 
@@ -137,6 +196,7 @@ class ArvoreBinaria {
             atual = atual.esq;
         }
         if (sucessor != apaga.dir) {
+            operations++;
             paidosucessor.esq = sucessor.dir;
             sucessor.dir = apaga.dir;
         }
@@ -148,6 +208,11 @@ class ArvoreBinaria {
         imprimir(root);
     }
 
+
+    public long getOperations() {
+        return operations;
+    }
+
     public void imprime_ordem(){
         System.out.print("Imprimindo em ordem: ");
         ordem(root);
@@ -155,6 +220,7 @@ class ArvoreBinaria {
 
     public void ordem(No atual) {
         if (atual != null) {
+            operations++;
             ordem(atual.esq);
             System.out.print(atual.livro.getCodigo() + " ");
             ordem(atual.dir);
@@ -163,6 +229,7 @@ class ArvoreBinaria {
 
     public void imprimir(No atual) {
         if (atual != null) {
+            operations++;
             System.out.print(atual.livro.getCodigo() + " ");
             imprimir(atual.esq);
             imprimir(atual.dir);
